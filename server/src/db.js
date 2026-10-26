@@ -7,7 +7,28 @@ import mongoose from 'mongoose';
 function cleanUri(raw) {
   const s = (raw ?? '').trim().replace(/["'\s]+$/, '');
   const start = s.search(/mongodb(\+srv)?:\/\//);
-  return start >= 0 ? s.slice(start) : s;
+  return encodeCredentials(start >= 0 ? s.slice(start) : s);
+}
+
+function safeDecode(text) {
+  try {
+    return decodeURIComponent(text);
+  } catch {
+    return text;
+  }
+}
+
+// Codifica utente e password, così funzionano anche password con / # ? @ :
+// (l'host non contiene mai "@", quindi le credenziali finiscono all'ultima "@")
+function encodeCredentials(uri) {
+  const m = uri.match(/^(mongodb(?:\+srv)?:\/\/)(.+)@([^@]+)$/s);
+  if (!m) return uri;
+  const [, scheme, userinfo, rest] = m;
+  const colon = userinfo.indexOf(':');
+  if (colon < 0) return uri;
+  const user = encodeURIComponent(safeDecode(userinfo.slice(0, colon)));
+  const pass = encodeURIComponent(safeDecode(userinfo.slice(colon + 1)));
+  return `${scheme}${user}:${pass}@${rest}`;
 }
 
 export async function connectDb() {
