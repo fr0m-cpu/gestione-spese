@@ -1,0 +1,16 @@
+# Configurazione per pubblicare l'app su Render (render.com) con un clic
+services:
+  - type: web
+    name: gestione-spese
+    runtime: node
+    plan: free
+    buildCommand: npm install --include=dev && npm run build
+    startCommand: npm start
+    healthCheckPath: /api/auth/me
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: MONGODB_URI
+        sync: false
+      - key: JWT_SECRET
+        generateValue: true
