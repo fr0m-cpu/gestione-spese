@@ -10,6 +10,23 @@ function cleanUri(raw) {
   return encodeCredentials(start >= 0 ? s.slice(start) : s);
 }
 
+// Spiega cosa non va nella forma della stringa, senza mai stamparne il contenuto
+function checkShape(uri) {
+  const body = uri.replace(/^mongodb(\+srv)?:\/\//, '');
+  const at = body.lastIndexOf('@');
+  if (at < 0) {
+    throw new Error(
+      'MONGODB_URI non valida: manca la "@" tra la password e l\'indirizzo del cluster (…:PASSWORD@m0.xxxx.mongodb.net/…)',
+    );
+  }
+  const host = body.slice(at + 1).split(/[/?]/)[0];
+  if (!host.endsWith('.mongodb.net')) {
+    throw new Error(
+      `MONGODB_URI non valida: dopo la "@" ci deve essere l'indirizzo del cluster che finisce con ".mongodb.net" (ora finisce con "${host.slice(-12)}")`,
+    );
+  }
+}
+
 function safeDecode(text) {
   try {
     return decodeURIComponent(text);
@@ -38,6 +55,7 @@ export async function connectDb() {
     // Il valore non viene stampato perché potrebbe contenere la password
     throw new Error('MONGODB_URI non valida: non contiene "mongodb+srv://". Reincolla la stringa di Atlas.');
   }
+  if (uri.startsWith('mongodb+srv://')) checkShape(uri);
 
   if (!uri) {
     if (process.env.NODE_ENV === 'production') {
