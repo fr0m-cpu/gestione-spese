@@ -22,6 +22,9 @@ export function createApp() {
   app.use(express.json({ limit: '100kb' }));
   app.use(cookieParser());
 
+  // Usato da Render per verificare che il server sia attivo
+  app.get('/api/health', (req, res) => res.json({ ok: true }));
+
   app.use('/api/auth', rateLimit({ windowMs: 15 * 60 * 1000, limit: 100 }), authRoutes);
   app.use('/api/transactions', requireAuth, transactionRoutes);
   app.use('/api/goals', requireAuth, goalRoutes);
