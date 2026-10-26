@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { Link } from 'react-router-dom';
 import { useAuth } from '../auth.jsx';
 
 export default function Account() {
@@ -31,6 +32,9 @@ export default function Account() {
       <section className="card">
         <h2>Elimina account</h2>
         <p className="muted">Cancella l'account e tutti i movimenti, gli obiettivi e i budget.</p>
+        <p className="small">
+          <Link to="/privacy">Informativa sulla privacy</Link>
+        </p>
         {error && <p className="error">{error}</p>}
         <div className="actions">
           <button className="btn danger" onClick={remove}>

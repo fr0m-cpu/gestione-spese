@@ -7,8 +7,9 @@ import Transactions from './pages/Transactions.jsx';
 import Goals from './pages/Goals.jsx';
 import Budgets from './pages/Budgets.jsx';
 import Account from './pages/Account.jsx';
+import Privacy from './pages/Privacy.jsx';
 
-function Routed() {
+function Gate() {
   const { user } = useAuth();
 
   if (user === undefined) return <div className="splash">Caricamento…</div>;
@@ -31,7 +32,11 @@ function Routed() {
 export default function App() {
   return (
     <AuthProvider>
-      <Routed />
+      <Routes>
+        {/* L'informativa è leggibile anche senza account */}
+        <Route path="privacy" element={<Privacy />} />
+        <Route path="*" element={<Gate />} />
+      </Routes>
     </AuthProvider>
   );
 }

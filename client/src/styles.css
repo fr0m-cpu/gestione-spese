@@ -568,6 +568,25 @@ select:focus {
   }
 }
 
+/* Informativa privacy */
+.legal {
+  max-width: 720px;
+  padding-bottom: 3rem;
+}
+.legal h1 {
+  margin-top: 1rem;
+}
+.legal h2 {
+  margin: 1.75rem 0 0.5rem;
+}
+.legal p,
+.legal ul {
+  margin: 0 0 0.75rem;
+}
+.legal li {
+  margin-bottom: 0.35rem;
+}
+
 /* Accesso */
 .auth-page {
   min-height: 100vh;

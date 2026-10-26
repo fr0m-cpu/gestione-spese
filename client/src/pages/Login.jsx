@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { Link } from 'react-router-dom';
 import { useAuth } from '../auth.jsx';
 
 export default function Login() {
@@ -52,7 +53,12 @@ export default function Login() {
               required
             />
           </label>
-          {isRegister && <p className="hint">Almeno 8 caratteri.</p>}
+          {isRegister && (
+            <p className="hint">
+              Almeno 8 caratteri. Creando l'account dichiari di aver letto l'
+              <Link to="/privacy">informativa sulla privacy</Link>.
+            </p>
+          )}
           {error && <p className="error">{error}</p>}
           <button className="btn primary wide" disabled={busy}>
             {busy ? 'Attendi…' : isRegister ? 'Crea account' : 'Accedi'}
@@ -68,6 +74,9 @@ export default function Login() {
         >
           {isRegister ? 'Hai già un account? Accedi' : 'Non hai un account? Registrati'}
         </button>
+        <Link to="/privacy" className="small muted">
+          Privacy
+        </Link>
       </div>
     </div>
   );
